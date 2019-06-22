@@ -9,7 +9,7 @@
     "server": "nodemon server/server.js",
     "client": "cd client && yarn start",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
-    "heroku-postbuild":" cd client && npm install && npm run build"
+    "heroku-postbuild":"NPM_CONFIG_PRODUCTION=false npm install cd client && npm build cd client"
   },
   "engines": {
     "node":"12.4.0"
