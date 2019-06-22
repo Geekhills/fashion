@@ -11,7 +11,8 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true})
+mongoose.connect(process.env.MONGODB_URI ||
+"mongodb://user:Frankline.2012@ds129003.mlab.com:29003/heroku_3ksq4cm1", {useNewUrlParser: true})
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 
