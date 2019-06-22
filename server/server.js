@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DATABASE, {useNewUrlParser: true})
+mongoose.connect(process.env.MONGODB_URI, {useNewUrlParser: true})
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 
@@ -19,6 +19,8 @@ mongoose.set('useFindAndModify', false);
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+app.use(express.static('client/build'))
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -29,10 +31,10 @@ cloudinary.config({
 
 
 // Models
-const { User } = require('./models/user');
-const { Brand } = require('./models/brand');
-const { Wood } = require('./models/wood');
-const { Product } = require('./models/product');
+const { User } = require('./models/user/');
+const { Brand } = require('./models/brand/');
+const { Wood } = require('./models/wood/');
+const { Product } = require('./models/product/');
 
 // Middlewares
 const { auth } = require('./middleware/auth');
@@ -338,6 +340,14 @@ app.get('/api/users/removeFromCart',auth,(req,res)=>{
         }
     );
 })
+
+//DEFAULT
+if(process.env.NODE_ENV === 'production'){
+    const path = require('path');
+    app.get('/*',(req,res)=>{
+        res.sendfile(path.resolve(__dirname,'../client', 'build', 'index.html'))
+    })
+}
 
 
 const port = process.env.PORT || 3002;
